@@ -22,7 +22,12 @@ app.use(express.json());
 //   })
 // );
 
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true
+}));
 
 const db = new sqlite3.Database(process.env.DB_FILE, (err) => {
     if(err){
@@ -54,10 +59,56 @@ app.post("/getapikey", (req, res) => {
 });
 
 // console.log(product_data);
+const hist_table = `CREATE TABLE IF NOT EXISTS HISTORY (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    prompt TEXT NOT NULL,
+    response TEXT
+  )`;
+
+db.run(hist_table, [], (err) => {
+  if(err){
+    return console.log("ERROR IN HISTORY TABLE CREATION : "+err);
+  }
+  console.log("HISTORY TABLE CREATED");
+})
+
+app.post('/addhistory', (req, res) => {
+  const { prompt, response } = req.body;
+  console.log("Prompt : "+prompt);
+  console.log("Response: "+JSON.stringify(response));
+
+  const query = `insert into HISTORY (prompt, response) values (?, ?);`;
+  db.run(query, [prompt, JSON.stringify(response)], (err) => {
+    if(err){
+      return res.status(500).send({success: false, message: `ERROR IN CHAT SAVING: ${err}`})
+    }
+    return res.status(200).send({success: true, message: "CHAT SAVED"});
+  })
+});
 
 app.post("/get_product_catalog", (req, res) => {
   res.status(200).send({success: true, product_catalog: product_data})
 })
+
+
+
+app.post("/gethistory", (req, res) => {
+  const { message } = req.body;
+  db.all("Select * from History", [], (err, data) => {
+    if(err){
+      return res.status(500).send({success: false, history: "NO HISTORY FOUND"})
+    }
+    return res.status(200).send({success: true, history: data})
+  })
+})
+
+// db.run("drop table History", [], (err) => {
+//   if(err){
+//     return console.log("ERROR IN HISTORY DELETION");
+//   }
+//   console.log("SUCESS");
+// })
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
