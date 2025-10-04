@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CardsAnimation from '../ui/CardsAnimation';
 
 // An array of the feature strings. This makes it easier to map and apply animations.
@@ -15,17 +15,23 @@ const features = [
   "Smarter Search, Better Choices",
 ];
 
-// To make the animation work, add this keyframe animation to your global CSS file (e.g., globals.css)
-/*
-
-*/
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const InitialPage = () => {
+
+  const [displayNote, setDisplayNote] = useState(false);
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-white text-black p-6 overflow-hidden'>
-      <div>
-        
+      <div className={`news-ticker fixed z-200 top-[30px] w-[80%] flex rounded-full p-1.5 items-center bg-red-300 ${displayNote && 'hidden'}`}>
+        <div className='scrolling-note-container'>
+            <p className='scrolling-text'>
+              Note: ChatGPT responses may be inaccurate as testing wasn't fully completed. Results will update once a valid OpenAI key is available. 
+              <strong className='text-black'> Use Gemini for accurate results.</strong>
+            </p>
+           </div>
+        <div onClick={() => {setDisplayNote(!displayNote)}}><AiOutlineCloseCircle size={30} /></div>
       </div>
+
       <div className='text-center mb-12'>
         <h1 className='
           text-4xl md:text-6xl 
@@ -38,10 +44,6 @@ const InitialPage = () => {
         </h1>
         <p className="text-gray-400 text-lg mt-2">Your personal guide to smarter choices.</p>
       </div>
-
-      {/* <div>
-        <CardsAnimation />
-      </div> */}
 
       <div className="flex flex-row flex-wrap gap-4 items-center justify-center max-w-4xl">
         {features.map((feature, index) => (
