@@ -9,10 +9,10 @@ const ChatHistory = ({ chat }) => {
     const handleBackButton = () => {
         navigate(-1);
     }
-    console.log(chat);
+    // console.log(chat);
   return (
     <div className='md:w-[90%] mx-auto min-h-screen bg-white'>
-        <div className='fixed top-4 left-10 p-2' onClick={handleBackButton}>
+        <div className='z-50 fixed top-4 left-10 p-2' onClick={handleBackButton}>
             <div className='bg-red-400 p-3 text-white rounded-full'><MdOutlineArrowBack size={20}/></div>
         </div>
         <div className='bg-blue-300 text-3xl text-white text-center p-2'>SAVED CHAT HISTORY</div>
