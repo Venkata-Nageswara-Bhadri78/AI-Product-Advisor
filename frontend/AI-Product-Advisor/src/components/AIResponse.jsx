@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import LinearLoading from "../ui/LinearLoading";
 import EmptyResponsePage from "../ui/EmptyResponsePage";
+import PopUpSave from "../ui/PopUpSave";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const AIResponse = ({ model, prompt, setPrompt, clearResponse, setClearResponse }) => {
+const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearResponse }) => {
   const [answer, setAnswer] = useState("Loading...");
   // const [gptKey, setGptKey] = useState("");
   // const [geminiKey, setGeminiKey] = useState("");
@@ -18,6 +19,7 @@ const AIResponse = ({ model, prompt, setPrompt, clearResponse, setClearResponse 
   // type of product should I want then you return only the data that suitable 
   // with the user requirement 100/100 (Return only those which aligns well with 
   // user prompt) and also don't give any extra data. Here is your Product Json Data : ${JSON.stringify(jsonData)}`;
+
 
   useEffect(() => {
     if(clearResponse){
@@ -124,6 +126,28 @@ const AIResponse = ({ model, prompt, setPrompt, clearResponse, setClearResponse 
             // console.log(extractData);
             // const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text;
             setAnswer(extractData || "Unable to Extract Data");
+
+            if(isOn){
+              const k = convertResponseToJSON(extractData)
+              // useEffect(() => {
+                const fetchHistory = async () => {
+                  const response = await fetch(`${API_URL}/addhistory`, {
+                    method: 'POST',
+                    headers: {'Content-Type' : 'application/json'},
+                    body: JSON.stringify({prompt: prompt, response: k})
+                  })
+
+                  const data = await response.json();
+                  if(data.success){
+                    <PopUpSave show={true} success={data.success} message={data.message} />
+                  }
+                  else{
+                    <PopUpSave show={true} success={data.success} message={data.message} /> 
+                  }
+                }
+                fetchHistory();
+              // }, [prompt, k])
+            }
             setLoading(false);
           }
         }        
