@@ -11,6 +11,8 @@ import { TfiReload } from "react-icons/tfi";
 import { GoSingleSelect } from "react-icons/go";
 import ShowmoreButton from '../ui/ShowmoreButton';
 import MenuBar from '../ui/MenuBar';
+import SaveChat from '../ui/SaveChat';
+import PopUpSave from '../ui/PopUpSave';
 
 
 export default function AdvisorControls() {
@@ -19,6 +21,9 @@ export default function AdvisorControls() {
   const [model, setModel] = React.useState("gemini");
   const [isAI, setIsAI] = React.useState(false);
   const [inputPrompt, setInputPrompt] = React.useState("");
+
+  const [isOn, setIsOn] = React.useState(false);
+
   
   const [displayResponse, setDisplayResponse] = React.useState(false);
   const handleSubmit = () => {
@@ -45,8 +50,8 @@ export default function AdvisorControls() {
 
             <div className='flex w-full justify-between shadow-2xl items-center gap-3'>
                 <div className="py-3 flex flex-row items-center">
-                    <div className='flex  items-center gap-4'>
-                        <div className="relative w-full">
+                    <div className='flex items-center gap-4'>
+                        <div className="relative">
                             <select
                             onChange={(e) => setModel(e.target.value)}
                             defaultValue="gemini"
@@ -62,6 +67,9 @@ export default function AdvisorControls() {
 
                         <div className=''>
                             <MenuBar />
+                        </div>
+                        <div className=''>
+                            <SaveChat isOn={isOn} setIsOn={setIsOn} />
                         </div>
                     </div>
 
@@ -118,7 +126,7 @@ export default function AdvisorControls() {
             {/* {displayResponse && <div className="p-3 bg-blue-500 rounded-xl flex justify-center items-center text-lg md:text-xl font-semibold text-white shadow-md tracking-wide">
             HERE ARE THE PRODUCT SUGGESTIONS
             </div>} */}
-            {displayResponse ? <AIResponse model={model} prompt={prompt} setPrompt={setPrompt} clearResponse={clearResponse} setClearResponse={setClearResponse} /> : <InitialPage />}
+            {displayResponse ? <AIResponse isOn={isOn} model={model} prompt={prompt} setPrompt={setPrompt} clearResponse={clearResponse} setClearResponse={setClearResponse} /> : <InitialPage />}
         </div>
     </div>
   );
