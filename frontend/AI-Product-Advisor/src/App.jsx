@@ -6,6 +6,7 @@ import AdvisorControls from "./components/AdvisorControls";
 import { Route, Router, Routes } from "react-router-dom";
 import ProductCatalog from "./components/ProductCatalog";
 import ChatHistory from "./components/ChatHistory";
+import DotNetwork from "./ui/DotNetwork";
 const API_URL = import.meta.env.VITE_API_URL;
 function App() {
 
