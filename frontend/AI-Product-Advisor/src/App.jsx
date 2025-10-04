@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DashBoard from './components/DashBoard';
 import EmptyResponsePage from "./ui/EmptyResponsePage";
 
@@ -8,18 +8,59 @@ import ProductCatalog from "./components/ProductCatalog";
 import ChatHistory from "./components/ChatHistory";
 const API_URL = import.meta.env.VITE_API_URL;
 function App() {
+
+  const [history, setHistory] = useState([]);
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const response = await fetch(`${API_URL}/gethistory`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: "history"})
+      })
+      const data = await response.json();
+      if(data.success){
+        setHistory(data.history);
+      }
+      else{
+        return console.log("ERROR IN CHAT HISTORY FETCHING");
+      }
+
+    }
+    fetchHistory();
+  }, []);
+
+  // console.log("History");
+  // console.log(history);
+
   return (
     <div className="bg-gray-300">
       <Routes>
         <Route path="/" element={<AdvisorControls />} />
         <Route path="/product_catalog" element={<ProductCatalog />} />
-        <Route path="/chat_history" element={<ChatHistory chat={chat}/>} />
+        <Route path="/chat_history" element={<ChatHistory chat={parseHistoryData(history)}/>} />
       </Routes>
     </div>
   )
 }
 
 export default App
+function parseHistoryData(history) {
+  return history.map(item => {
+    let parsedResponse;
+
+    try {
+      parsedResponse = JSON.parse(item.response);
+    } catch (err) {
+      console.error("Failed to parse response for item id:", item.id, err);
+      parsedResponse = item.response; // fallback to raw string
+    }
+
+    return {
+      ...item,
+      response: parsedResponse
+    };
+  });
+}
 
 
 const chat = [
