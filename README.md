@@ -1,5 +1,19 @@
 ## PROJECT SETUP INSTRUCTIONS
 
+#### ENVIRONMENT SETUP
+
+### 🔑 Environment Setup
+Create a `.env` file inside the `backend` folder using the template below:
+
+```
+GPT_API_KEY=your_openai_api_key_here  
+GEMINI_API_KEY=your_gemini_api_key_here  
+PORT=3000  
+```
+Refer to `backend/.env.example` for required keys.
+
+### Project Setup Instructions
+
 #### 1. Clone the repo
 ```
 git clone https://github.com/Venkata-Nageswara-Bhadri78/AI-Product-Advisor.git
@@ -20,6 +34,7 @@ Move to frontend `cd frontend/AI-Product-Advisor` and run below commands
 npm install
 npm run dev
 ```
+
 
 #### 4. Open and Explore the App
 
