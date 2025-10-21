@@ -21,7 +21,7 @@ export default function ProductCard({product}) {
 
   return (
     // <div className='min-h-100'>
-    <Card sx={{ maxWidth: 300 }}>
+    <Card sx={{ maxWidth: 250 }}>
       <CardHeader
         sx={{
             px: 1,
@@ -44,7 +44,7 @@ export default function ProductCard({product}) {
       />
       <CardContent sx={{ p: 1.5 }}>
         <Typography variant="body2" color="text.secondary" component="div">
-            <div className='font-semibold text-black'>{product.category}</div>
+            <div className='bg-blue-100 px-2 rounded-full border border-blue-400 inline-flex text-black'>{product.category}</div>
             <div className='lg:min-h-30 md:min-h-45 text-justify'>{product.description}</div>
         </Typography>
       </CardContent>
@@ -58,12 +58,10 @@ export default function ProductCard({product}) {
             </IconButton>
         </div>
         <div>
-            {/* <button className='p-1.5 rounded-sm text-white bg-blue-500'>Show More</button> */}
             <ShowmoreButton />
         </div>
       </CardActions>
     </Card>
-    // </div>
   );
 }
 

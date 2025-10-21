@@ -1,7 +1,7 @@
 // All Imports required for the project backend
 
 import fs from 'fs';
-import express from 'express';
+import express, { response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import sqlite3 from 'sqlite3';
@@ -12,7 +12,7 @@ import product_data from './product_catalog.js';
 dotenv.config();
 
 const app = express();
-// Middleware
+
 app.use(express.json());
 // Use CORS with frontend URL from .env
 // app.use(
@@ -47,14 +47,56 @@ app.post('/example', (req, res) => {
 })
 
 app.post("/getapikey", (req, res) => {
-  const { model } = req.body;
+  const { model, userPrompt } = req.body;
   if(model=='chatgpt'){
     const gptKey = process.env.VITE_OPENAI_API_KEY;
     res.status(200).send({success: true, key: gptKey})
   }
   else{
     const geminiKey = process.env.VITE_GEMINI_API_KEY
-    res.status(200).send({success: true, key: geminiKey})
+    // res.status(200).send({success: true, key: geminiKey})
+
+    const fetchResponse = async () => {
+      const promptText = `
+        You are given a product catalog in JSON format. 
+        Return ONLY the products that match the user's request. 
+        Catalog: ${JSON.stringify(product_data)}
+        User request: ${userPrompt}
+      `;
+
+      const geminiResponse = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.VITE_GEMINI_API_KEY}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: "user",
+                parts: [{ text: promptText}],
+              },
+            ],
+          }),
+        }
+      );
+
+      if (!geminiResponse.ok) {
+        const errorData = await geminiResponse.json();
+        console.error("Gemini Model error:", errorData);
+        setAnswer("Error: " + (errorData.error?.message || geminiResponse.statusText));
+        return;
+      }
+      
+      const result = await geminiResponse.json(); 
+      const extractData = result.candidates[0].content.parts[0].text;
+      // console.log(extractData);
+      // const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+      // setAnswer(extractData || "Unable to Extract Data");
+      return res.status(200).send({success: true, response: extractData});
+    }
+    fetchResponse();
   }
 });
 

@@ -46,7 +46,7 @@ const ProductCatalog = () => {
             <div className='bg-red-400 p-3 text-white rounded-full'><MdOutlineArrowBack size={20}/></div>
         </div>
         <div>
-          <div onClick={handleDisplay} className='bg-black border-black p-3 text-white rounded-full'>{displayRawData ? "SHOW CARD FORMAT" : "SHOW RAW FORMAT"}</div>
+          <div onClick={handleDisplay} className='cursor-pointer bg-black border-black p-3 text-white rounded-full'>{displayRawData ? "SHOW CARD FORMAT" : "SHOW RAW FORMAT"}</div>
         </div>
       </div>
 

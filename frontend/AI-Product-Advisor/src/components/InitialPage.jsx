@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import CardsAnimation from '../ui/CardsAnimation';
+import Box from '@mui/joy/Box';
+import Typography from '@mui/joy/Typography';
+import Chip from '@mui/joy/Chip';
+import Alert from '@mui/joy/Alert';
+import IconButton from '@mui/joy/IconButton';
 
-// An array of the feature strings. This makes it easier to map and apply animations.
+import { AiOutlineCloseCircle } from "react-icons/ai";
+
+// An array of the feature strings.
 const features = [
   "Ask in Plain English",
   "Smart AI Matching",
@@ -15,53 +21,109 @@ const features = [
   "Smarter Search, Better Choices",
 ];
 
-import { AiOutlineCloseCircle } from "react-icons/ai";
+// This assumes 'fadeInUp' is defined in your global CSS/Tailwind config.
+const fadeInUpAnimation = {
+  animation: 'fadeInUp 0.5s ease-out forwards',
+  opacity: 0,
+};
 
 const InitialPage = () => {
+  // Renamed state for clarity
+  const [isAlertDismissed, setIsAlertDismissed] = useState(false);
 
-  const [displayNote, setDisplayNote] = useState(false);
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-white text-black p-6 overflow-hidden'>
-      <div className={`news-ticker fixed z-200 top-[30px] w-[80%] flex rounded-full p-1.5 items-center bg-red-300 ${displayNote && 'hidden'}`}>
-        <div className='scrolling-note-container'>
-            <p className='scrolling-text'>
-              Note: ChatGPT responses may be inaccurate as testing wasn't fully completed. Results will update once a valid OpenAI key is available. 
-              <strong className='text-black'> Use Gemini for accurate results.</strong>
-            </p>
-           </div>
-        <div onClick={() => {setDisplayNote(!displayNote)}}><AiOutlineCloseCircle size={30} /></div>
-      </div>
-
-      <div className='text-center mb-12'>
-        <h1 className='
-          text-4xl md:text-6xl 
-          font-extrabold 
-          bg-clip-text text-transparent 
-          bg-gradient-to-r from-purple-400 to-cyan-400
-          pb-2
-        '>
-          Welcome to AI Product Advisor
-        </h1>
-        <p className="text-gray-400 text-lg mt-2">Your personal guide to smarter choices.</p>
-      </div>
-
-      <div className="flex flex-row flex-wrap gap-4 items-center justify-center max-w-4xl">
-        {features.map((feature, index) => (
-          <span
-            key={feature}
-            className='
-              bg-gray-100 border border-blue-300 
-              text-blue-500 text-sm font-medium 
-              px-4 py-2 rounded-full 
-              animate-fadeInUp
-            '
-            style={{ animationDelay: `${index * 100}ms` }}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        bgcolor: 'background.body',
+        p: { xs: 2, md: 4 },
+        overflow: 'hidden', // Prevents animation overflow
+      }}
+    >
+      <Box sx={{ maxWidth: 'lg' }}>
+        {/* This Alert replaces the 'news-ticker'. 
+          It's in the page flow (not 'fixed'), looks cleaner,
+          and is more accessible.
+        */}
+        {!isAlertDismissed && (
+          <Alert
+            variant="soft"
+            color="warning"
+            sx={{ mb: 4, borderRadius: 'lg' }}
+            endDecorator={
+              <IconButton 
+                variant="plain" 
+                color="warning" 
+                size="sm"
+                onClick={() => setIsAlertDismissed(true)}
+              >
+                <AiOutlineCloseCircle size={20} />
+              </IconButton>
+            }
           >
-            {feature}
-          </span>
-        ))}
-      </div>
-    </div>
+            <Typography level="body-sm" color="warning">
+              Note: ChatGPT responses may be inaccurate as testing wasn't fully completed. 
+              Results will update once a valid OpenAI key is available. 
+              <strong> Use Gemini for accurate results.</strong>
+            </Typography>
+          </Alert>
+        )}
+
+        <Typography
+          level="h1"
+          sx={{
+            mb: 1.5,
+            fontSize: { xs: '2.5rem', md: '3.75rem' }, // Responsive font size
+            fontWeight: 'xl',
+            // Gradient text effect using Joy UI's sx prop
+            background: (theme) =>
+              `linear-gradient(to right, ${theme.vars.palette.primary[400]}, ${theme.vars.palette.success[400]})`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
+          Welcome to AI Product Advisor
+        </Typography>
+
+        <Typography
+          level="body-lg"
+          textColor="text.tertiary" // Use theme color for accessibility
+          sx={{ mb: 6 }}
+        >
+          Your personal guide to smarter choices.
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 1.5,
+            justifyContent: 'center',
+            maxWidth: 'xl', // was max-w-4xl
+          }}
+        >
+          {features.map((feature, index) => (
+            <Chip
+              key={feature}
+              variant="soft" // 'soft' gives a nice, modern bg
+              color="primary"
+              size="lg" // Larger, more readable chips
+              sx={{
+                ...fadeInUpAnimation,
+                animationDelay: `${index * 100}ms`,
+                '--Chip-radius': '999px', // Makes it a pill
+              }}
+            >
+              {feature}
+            </Chip>
+          ))}
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

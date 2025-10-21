@@ -11,17 +11,21 @@ const ChatHistory = ({ chat }) => {
     }
     // console.log(chat);
   return (
-    <div className='md:w-[90%] mx-auto min-h-screen bg-white'>
-        <div className='z-50 fixed top-4 left-10 p-2' onClick={handleBackButton}>
-            <div className='bg-red-400 p-3 text-white rounded-full'><MdOutlineArrowBack size={20}/></div>
+    <div className='md:w-[70%] p-2 mx-auto min-h-screen bg-white'>
+
+        <div className="fixed z-50 flex items-center gap-3 w-full md:p-4 cursor-pointer group" onClick={handleBackButton}>
+        <div className="flex items-center justify-center bg-red-500 hover:bg-red-600 transition-colors text-white rounded-full p-2 shadow-md"><MdOutlineArrowBack size={20}/></div>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-500 group-hover:text-blue-600 transition-colors">
+                Saved Chat History
+            </h1>
         </div>
-        <div className='bg-blue-300 text-3xl text-white text-center p-2'>SAVED CHAT HISTORY</div>
+        
         {chat && chat.length > 0 ? (chat.map((card, index) => {
             return (
                 <div key={index}>
                     {/* PROMPT */}
                     <div className='flex justify-end p-2'>
-                        <div className='bg-white w-[85%] md:w-auto border-gray-400 border p-2 rounded-md'>{card.prompt}</div>
+                        <div className='w-[85%] md:w-auto border-blue-300 bg-blue-50 border p-2 rounded-t-2xl rounded-l-2xl'>{card.prompt}</div>
                     </div>
                     {/* RESPONSE */}
                     <div className='p-2'>
