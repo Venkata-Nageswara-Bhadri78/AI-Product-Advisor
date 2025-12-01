@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router-dom';
 const ProductCatalog = () => {
 
   const navigate = useNavigate();
-  // console.log(API_URL)
-
   const [productCatalog, setProductCatalog] = useState([]);
   const [displayRawData, setDisplayRawData] = useState(true);
 
