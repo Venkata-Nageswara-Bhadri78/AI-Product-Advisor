@@ -8,18 +8,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearResponse }) => {
   const [answer, setAnswer] = useState("Loading...");
-  // const [gptKey, setGptKey] = useState("");
-  // const [geminiKey, setGeminiKey] = useState("");
 
   const [jsonData, setJsonData] = useState([]);
   const [responseJsonData, setResponseJsonData] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // const defaultPrompt = `You have given a small prompt about which 
-  // type of product should I want then you return only the data that suitable 
-  // with the user requirement 100/100 (Return only those which aligns well with 
-  // user prompt) and also don't give any extra data. Here is your Product Json Data : ${JSON.stringify(jsonData)}`;
-
 
   useEffect(() => {
     if(clearResponse){
@@ -46,7 +38,7 @@ const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearRes
           });
           const data = await response.json();
           if (data.success) {
-            // setGptKey(data.key);
+
             const gptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
               method: "POST",
               headers: {
@@ -86,55 +78,16 @@ const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearRes
           const data = await response.json();
           if (data.success) {
             setAnswer(data.response)
-            // setGeminiKey(data.key);
-
-            // const promptText = `
-            //   You are given a product catalog in JSON format. 
-            //   Return ONLY the products that match the user's request. 
-            //   Catalog: ${JSON.stringify(jsonData)}
-            //   User request: ${prompt}
-            // `;
-            // const geminiResponse = await fetch(
-            //   `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${data.key}`,
-            //   {
-            //     method: "POST",
-            //     headers: {
-            //       "Content-Type": "application/json",
-            //     },
-            //     body: JSON.stringify({
-            //       contents: [
-            //         {
-            //           role: "user",
-            //           parts: [{ text: promptText}],
-            //         },
-            //       ],
-            //     }),
-            //   }
-            // );
-        
-            // if (!geminiResponse.ok) {
-            //   const errorData = await geminiResponse.json();
-            //   console.error("Gemini Model error:", errorData);
-            //   setAnswer("Error: " + (errorData.error?.message || geminiResponse.statusText));
-            //   return;
-            // }
-        
-            // const result = await geminiResponse.json(); 
-            // const extractData = result.candidates[0].content.parts[0].text;
-            // // console.log(extractData);
-            // // const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-            // setAnswer(extractData || "Unable to Extract Data");
-
+ 
             if(isOn){
-              const k = convertResponseToJSON(extractData)
-              // useEffect(() => {
-                const fetchHistory = async () => {
+              const k = convertResponseToJSON(responseJsonData)
+
+                  const fetchHistory = async () => {
                   const response = await fetch(`${API_URL}/addhistory`, {
                     method: 'POST',
                     headers: {'Content-Type' : 'application/json'},
                     body: JSON.stringify({prompt: prompt, response: k})
                   })
-
                   const data = await response.json();
                   if(data.success){
                     <PopUpSave show={true} success={data.success} message={data.message} />
@@ -144,8 +97,8 @@ const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearRes
                   }
                 }
                 fetchHistory();
-              // }, [prompt, k])
-            }
+
+              }
             setLoading(false);
           }
         }        
@@ -179,14 +132,13 @@ const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearRes
     fetchCatalog();
   }, []);
 
-  // console.log(answer.substring(7, answer.length-3));
-  // const dataa = convertResponseToJSON(answer);
+  
   useEffect(() => {
     setResponseJsonData(convertResponseToJSON(answer));
   }, [answer]);
 
-  // if (!responseJsonData || (Array.isArray(responseJsonData) && responseJsonData.length === 0)) {
-    if(loading && prompt){
+
+  if(loading && prompt){
       return (
         <div className="p-3">
           <LinearLoading />
@@ -194,8 +146,6 @@ const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearRes
         </div>
       )
     }
-  // }
-  // console.log(responseJsonData);
 
   if (!responseJsonData || (Array.isArray(responseJsonData) && responseJsonData.length === 0)) {
     return (
@@ -203,11 +153,6 @@ const AIResponse = ({ isOn, model, prompt, setPrompt, clearResponse, setClearRes
     );
   }
   
-  // if(!isJSON(answer)){
-  //   return <div>{answer}</div>
-  // }
-  // console.log("responseJsonData:", responseJsonData);
-
   return (
     <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-5">
       {Array.isArray(responseJsonData) && responseJsonData.map((card, index) => {
