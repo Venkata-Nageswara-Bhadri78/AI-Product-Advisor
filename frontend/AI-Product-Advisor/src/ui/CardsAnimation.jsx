@@ -6,7 +6,7 @@ import CardContent from '@mui/joy/CardContent';
 import Typography from '@mui/joy/Typography';
 
 import card1 from '../assets/card1.png';
-import card2 from '../assets/card2.png';
+import card2 from '../assets/card2.jpg';
 import card3 from '../assets/card3.png';
 
 
