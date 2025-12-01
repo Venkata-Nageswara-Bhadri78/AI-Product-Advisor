@@ -21,14 +21,13 @@ const features = [
   "Smarter Search, Better Choices",
 ];
 
-// This assumes 'fadeInUp' is defined in your global CSS/Tailwind config.
 const fadeInUpAnimation = {
   animation: 'fadeInUp 0.5s ease-out forwards',
   opacity: 0,
 };
 
 const InitialPage = () => {
-  // Renamed state for clarity
+
   const [isAlertDismissed, setIsAlertDismissed] = useState(false);
 
   return (
@@ -41,19 +40,15 @@ const InitialPage = () => {
         textAlign: 'center',
         bgcolor: 'background.body',
         p: { xs: 2, md: 4 },
-        overflow: 'hidden', // Prevents animation overflow
+        overflow: 'hidden',
       }}
     >
       <Box sx={{ maxWidth: 'lg' }}>
-        {/* This Alert replaces the 'news-ticker'. 
-          It's in the page flow (not 'fixed'), looks cleaner,
-          and is more accessible.
-        */}
         {!isAlertDismissed && (
           <Alert
             variant="soft"
             color="warning"
-            sx={{ mb: 4, borderRadius: 'lg' }}
+            sx={{ mb: 4, borderRadius: 'lg', padding: '1px'}}
             endDecorator={
               <IconButton 
                 variant="plain" 
@@ -66,9 +61,8 @@ const InitialPage = () => {
             }
           >
             <Typography level="body-sm" color="warning">
-              Note: ChatGPT responses may be inaccurate as testing wasn't fully completed. 
-              Results will update once a valid OpenAI key is available. 
-              <strong> Use Gemini for accurate results.</strong>
+              Note: ChatGPT won't work as we don't have valid API Key. Will update the code once a valid OpenAI key is available. 
+              <strong> Use Gemini for now.</strong>
             </Typography>
           </Alert>
         )}
@@ -77,9 +71,8 @@ const InitialPage = () => {
           level="h1"
           sx={{
             mb: 1.5,
-            fontSize: { xs: '2.5rem', md: '3.75rem' }, // Responsive font size
+            fontSize: { xs: '2.5rem', md: '3.75rem' },
             fontWeight: 'xl',
-            // Gradient text effect using Joy UI's sx prop
             background: (theme) =>
               `linear-gradient(to right, ${theme.vars.palette.primary[400]}, ${theme.vars.palette.success[400]})`,
             WebkitBackgroundClip: 'text',
@@ -91,7 +84,7 @@ const InitialPage = () => {
 
         <Typography
           level="body-lg"
-          textColor="text.tertiary" // Use theme color for accessibility
+          textColor="text.tertiary"
           sx={{ mb: 6 }}
         >
           Your personal guide to smarter choices.
@@ -103,19 +96,19 @@ const InitialPage = () => {
             flexWrap: 'wrap',
             gap: 1.5,
             justifyContent: 'center',
-            maxWidth: 'xl', // was max-w-4xl
+            maxWidth: 'xl',
           }}
         >
           {features.map((feature, index) => (
             <Chip
               key={feature}
-              variant="soft" // 'soft' gives a nice, modern bg
+              variant="soft"
               color="primary"
-              size="lg" // Larger, more readable chips
+              size="lg"
               sx={{
                 ...fadeInUpAnimation,
                 animationDelay: `${index * 100}ms`,
-                '--Chip-radius': '999px', // Makes it a pill
+                '--Chip-radius': '999px',
               }}
             >
               {feature}
