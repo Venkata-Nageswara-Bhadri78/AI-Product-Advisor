@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import DashBoard from './components/DashBoard';
+
 import EmptyResponsePage from "./ui/EmptyResponsePage";
 
 import AdvisorControls from "./components/AdvisorControls";
 import { Route, Router, Routes } from "react-router-dom";
 import ProductCatalog from "./components/ProductCatalog";
 import ChatHistory from "./components/ChatHistory";
-import DotNetwork from "./ui/DotNetwork";
+
+import CardsAnimation from "./ui/CardsAnimation";
+import { BiHide } from "react-icons/bi";
 const API_URL = import.meta.env.VITE_API_URL;
 function App() {
 
@@ -30,16 +32,13 @@ function App() {
     fetchHistory();
   }, []);
 
-  // console.log("History");
-  // console.log(history);
-
   return (
-    <div className="bg-gray-300">
-      <Routes>
-        <Route path="/" element={<AdvisorControls />} />
-        <Route path="/product_catalog" element={<ProductCatalog />} />
-        <Route path="/chat_history" element={<ChatHistory chat={parseHistoryData(history)}/>} />
-      </Routes>
+    <div>
+    <Routes>
+      <Route path="/" element={<AdvisorControls />} />
+      <Route path="/product_catalog" element={<ProductCatalog />} />
+      <Route path="/chat_history" element={<ChatHistory chat={parseHistoryData(history)}/>} />
+    </Routes>
     </div>
   )
 }
@@ -53,7 +52,7 @@ function parseHistoryData(history) {
       parsedResponse = JSON.parse(item.response);
     } catch (err) {
       console.error("Failed to parse response for item id:", item.id, err);
-      parsedResponse = item.response; // fallback to raw string
+      parsedResponse = item.response;
     }
 
     return {
