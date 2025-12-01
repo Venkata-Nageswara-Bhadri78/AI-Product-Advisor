@@ -42,7 +42,7 @@ const db = new sqlite3.Database(process.env.DB_FILE, (err) => {
 
 app.post('/example', (req, res) => {
   const {data} = req.body;
-  console.log("Hai Backend Is Running Sucessfully");
+  console.log("Backend Is Running Sucessfully");
   return res.status(200).send({success: true})
 })
 
@@ -116,8 +116,6 @@ db.run(hist_table, [], (err) => {
 
 app.post('/addhistory', (req, res) => {
   const { prompt, response } = req.body;
-  console.log("Prompt : "+prompt);
-  console.log("Response: "+JSON.stringify(response));
 
   const query = `insert into HISTORY (prompt, response) values (?, ?);`;
   db.run(query, [prompt, JSON.stringify(response)], (err) => {
