@@ -1,95 +1,73 @@
 import * as React from 'react';
-// import { styled } from '@mui/material/styles'; // No longer needed
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-
+import { FaRegHeart, FaShareAlt } from 'react-icons/fa';
 import image from '../assets/prod_default_image.png';
-import ShowmoreButton from '../ui/ShowmoreButton';
 
-export default function ProductCard({product}) {
+export default function ProductCard({ product }) {
 
   const profileIcon = product.brand.substring(0, 1).toUpperCase();
+  const avatarColor = colorMap[profileIcon] || 'bg-gray-500';
 
   return (
-    // <div className='min-h-100'>
-    <Card sx={{ maxWidth: 250 }}>
-      <CardHeader
-        sx={{
-            px: 1,
-            py: 1,
-          }}
-        className='bg-blue-200 min-h-23'
-        avatar={
-          <Avatar sx={{ bgcolor: color[profileIcon], m:0 }}>
-            {profileIcon}
-          </Avatar>
-        }
-        title={product.brand}
-        subheader={`$ ${product.price}`}
-      />
-      <CardMedia
-        component="img"
-        height="140"
-        image={image}
-        alt={product.product_name}
-      />
-      <CardContent sx={{ p: 1.5 }}>
-        <Typography variant="body2" color="text.secondary" component="div">
-            <div className='bg-blue-100 px-2 rounded-full border border-blue-400 inline-flex text-black'>{product.category}</div>
-            <div className='lg:min-h-30 md:min-h-45 text-justify'>{product.description}</div>
-        </Typography>
-      </CardContent>
-      <CardActions className='flex justify-between'>
-        <div>
-            <IconButton aria-label="add to favorites" size="small">
-            <FavoriteIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton aria-label="share" size="small">
-            <ShareIcon fontSize="inherit" />
-            </IconButton>
+    <div className="max-w-xs w-full bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 
+                hover:scale-[1.02] border border-blue-400"
+    >      
+      <div className='flex items-center px-3 py-1.5 bg-blue-200 border-b border-gray-100'>        
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3 shadow-md ${avatarColor}`}>
+          {profileIcon}
+        </div>        
+        <div className='flex-grow'>
+          <h3 className='text-lg font-semibold text-gray-800 leading-tight'>
+            {product.brand.toUpperCase()}
+          </h3>
+          <p className='text-sm font-semibold text-green-600 leading-none'>
+            ${product.price}
+          </p>
         </div>
-        <div>
-            <ShowmoreButton />
+      </div>
+      
+      {/* <div className='h-50 overflow-hidden'>
+        <img
+          src={image}
+          alt={product.product_name}
+          className="w-full h-full object-cover"
+        />
+      </div> */}
+      
+      <div className='p-3'>
+        <div className='mb-2'>
+          <span className='inline-flex text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-300'>
+            {product.category}
+          </span>
         </div>
-      </CardActions>
-    </Card>
+
+        <p className='text-sm text-gray-600 text-justify min-h-25 max-h-24 overflow-hidden'>{product.description}</p>
+      </div>
+      
+      <div className='flex justify-between items-center py-1.5 px-3 border-t border-gray-400'>
+        <div>
+          <button aria-label="add to favorites" className='p-2 text-gray-500 hover:text-red-500 transition-colors'>
+            <FaRegHeart size={18} />
+          </button>
+          
+          <button aria-label="share" className='p-2 text-gray-500 hover:text-blue-500 transition-colors'>
+            <FaShareAlt size={18} />
+          </button>
+        </div>
+        
+        <div className='bg-blue-600 p-1 px-2 text-white rounded-md cursor-pointer'>
+          <div>SHOW MORE</div>
+        </div>
+      </div>
+    </div>
   );
 }
 
-const color = {
-  "A": "rgba(255, 0, 0, 0.8)",      // Red
-  "B": "rgba(0, 128, 0, 0.8)",      // Green
-  "C": "rgba(0, 0, 255, 0.8)",      // Blue
-  "D": "rgba(255, 165, 0, 0.8)",    // Orange
-  "E": "rgba(128, 0, 128, 0.8)",    // Purple
-  "F": "rgba(255, 192, 203, 0.8)",  // Pink
-  "G": "rgba(0, 255, 255, 0.8)",    // Cyan
-  "H": "rgba(128, 128, 0, 0.8)",    // Olive
-  "I": "rgba(255, 0, 255, 0.8)",    // Magenta
-  "J": "rgba(0, 128, 128, 0.8)",    // Teal
-  "K": "rgba(255, 215, 0, 0.8)",    // Gold
-  "L": "rgba(173, 216, 10, 0.8)",  // Light Blue
-  "M": "rgba(210, 105, 30, 0.8)",   // Chocolate
-  "N": "rgba(75, 0, 130, 0.8)",     // Indigo
-  "O": "rgba(240, 128, 128, 0.8)",  // Light Coral
-  "P": "rgba(34, 139, 34, 0.8)",    // Forest Green
-  "Q": "rgba(70, 130, 180, 0.8)",   // Steel Blue
-  "R": "rgba(255, 69, 0, 0.8)",     // Orange Red
-  "S": "rgba(138, 43, 226, 0.8)",   // Blue Violet
-  "T": "rgba(60, 179, 113, 0.8)",   // Medium Sea Green
-  "U": "rgba(0, 191, 255, 0.8)",    // Deep Sky Blue
-  "V": "rgba(255, 20, 147, 0.8)",   // Deep Pink
-  "W": "rgba(218, 165, 32, 0.8)",   // Goldenrod
-  "X": "rgba(147, 112, 219, 0.8)",  // Medium Purple
-  "Y": "rgba(32, 178, 170, 0.8)",   // Light Sea Green
-  "Z": "rgba(199, 21, 133, 0.8)"    // Medium Violet Red
+const colorMap = {
+  "A": "bg-red-500", "B": "bg-green-500", "C": "bg-blue-500", "D": "bg-orange-500",
+  "E": "bg-purple-500", "F": "bg-pink-500", "G": "bg-cyan-500", "H": "bg-yellow-600",
+  "I": "bg-fuchsia-500", "J": "bg-teal-500", "K": "bg-yellow-400", "L": "bg-sky-500",
+  "M": "bg-amber-600", "N": "bg-indigo-500", "O": "bg-rose-400", "P": "bg-emerald-500",
+  "Q": "bg-blue-700", "R": "bg-red-600", "S": "bg-violet-600", "T": "bg-lime-500",
+  "U": "bg-sky-400", "V": "bg-pink-600", "W": "bg-yellow-500", "X": "bg-indigo-400",
+  "Y": "bg-teal-400", "Z": "bg-rose-600"
 };
